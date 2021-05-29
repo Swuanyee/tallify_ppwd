@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Tallify</string>
+    <string-array name="boiler_type">
+        <item>Air Dry</item>
+        <item>Kiln Dry</item>
+    </string-array>
+    <string-array name="species_type">
+        <item>Teak</item>
+        <item>Pyinkado</item>
+        <item>Htaukkyant</item>
+        <item>Zagawah</item>
+        <item>Other Wood</item>
+    </string-array>
+    <string-array name="log_type">
+        <item>Log</item>
+        <item>S4S</item>
+        <item>Sawn</item>
+    </string-array>
+</resources>
