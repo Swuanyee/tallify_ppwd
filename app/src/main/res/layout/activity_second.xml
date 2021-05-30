@@ -6,16 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".SecondActivity">
 
-    <ScrollView
-        android:id="@+id/container_scroll"
-        android:layout_width="400dp"
-        android:layout_height="497dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="119dp"
-        android:layout_marginEnd="7dp"
+    <TextView
+        android:id="@+id/text_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="53dp"
+        android:layout_marginBottom="30dp"
+        android:text="Placeholder"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/container_scroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/container_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_header">
 
         <LinearLayout
             android:id="@+id/container_whole"
@@ -1898,17 +1912,19 @@
                         android:text="-" />
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/btn_done"
-        android:layout_width="99dp"
-        android:layout_height="49dp"
+        android:layout_width="113dp"
+        android:layout_height="47dp"
         android:layout_marginBottom="48dp"
         android:text="Done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/container_scroll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
