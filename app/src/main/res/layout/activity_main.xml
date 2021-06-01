@@ -6,31 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
-        android:layout_marginBottom="20dp"
-        android:text="Tallify By PPWD"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#009688"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="320dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="42dp"
+        android:layout_width="350dp"
+        android:layout_height="560dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/text_name"
@@ -43,7 +28,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Aung Soe Kyaw"
             android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="01 May 2021"
+            android:text="Date" />
+
+        <EditText
+            android:id="@+id/input_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="01/06/2021"
+            android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -60,7 +63,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="U Tut"
             android:inputType="textPersonName"
+            android:text="NA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -78,6 +83,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:text="NA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -92,6 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="0000001"
             android:inputType="number" />
 
         <TextView
@@ -135,12 +142,25 @@
             android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/text_measurement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unit" />
+
+        <Spinner
+            android:id="@+id/dropdown_measurement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <Button
             android:id="@+id/btn_tally"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:text="Tally" />
 
     </LinearLayout>

@@ -57,18 +57,32 @@ class MainActivity : AppCompatActivity() {
             log_status.adapter = adapter
         }
 
+        val measurement_unit: Spinner = findViewById(R.id.dropdown_measurement)
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.unit,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            measurement_unit.adapter = adapter
+        }
         Log.info("onCreate")
         binding.btnTally.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val m_intent = Intent(this@MainActivity, SecondActivity::class.java)
                 val m_bundle = Bundle()
                 m_bundle.putString("name", binding.inputName.text.toString())
+                m_bundle.putString("date", binding.inputDate.text.toString())
                 m_bundle.putString("supplier", binding.inputSupplier.text.toString())
                 m_bundle.putString("invoice", binding.inputInvoiceNum.text.toString())
                 m_bundle.putInt("ref", binding.inputRef.text.toString().toInt())
                 m_bundle.putString("boiler", binding.dropdownBoiler.selectedItem.toString())
                 m_bundle.putString("species", binding.dropdownSpecies.selectedItem.toString())
                 m_bundle.putString("status", binding.dropdownStatus.selectedItem.toString())
+                m_bundle.putString("unit", binding.dropdownMeasurement.selectedItem.toString())
                 m_intent.putExtra("main_activity_data", m_bundle)
                 startActivity(m_intent)
             }

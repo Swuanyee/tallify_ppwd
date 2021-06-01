@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Tallify</string>
     <string-array name="boiler_type">
+        <item>None</item>
         <item>Air Dry</item>
         <item>Kiln Dry</item>
     </string-array>
@@ -16,5 +17,9 @@
         <item>Log</item>
         <item>S4S</item>
         <item>Sawn</item>
+    </string-array>
+    <string-array name="unit">
+        <item>Imperial</item>
+        <item>Metric</item>
     </string-array>
 </resources>

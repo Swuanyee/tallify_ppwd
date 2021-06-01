@@ -1,8 +1,10 @@
 package tallify.greengoldindustries.tallify
 
 import android.content.Context
+import android.icu.util.Output
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,10 +17,8 @@ import org.apache.poi.ss.usermodel.CellStyle
 import tallify.greengoldindustries.tallify.databinding.ActivityMainBinding
 import tallify.greengoldindustries.tallify.databinding.ActivitySecondBinding
 import tallify.greengoldindustries.tallify.databinding.MeasurementFormsBinding
-import java.io.File
+import java.io.*
 import java.time.LocalDateTime
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding_second: ActivitySecondBinding
@@ -26,12 +26,15 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     var counter_name= "String"
+    var tally_date = "String"
     var supplier_name= "String"
     var invoice = "String"
     var ref = 0
     var boiler = "String"
     var species = "String"
     var status = "String"
+
+    var this_filename = "String"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,19 +104,35 @@ class SecondActivity : AppCompatActivity() {
         **/
         val bundle = intent.getBundleExtra("main_activity_data")
         counter_name = bundle?.getString("name").toString()
+        tally_date = bundle?.getString("date").toString()
         supplier_name= bundle?.getString("supplier").toString()
         invoice = bundle?.getString("invoice").toString()
         ref = bundle?.getInt("ref").toString().toInt()-1
         boiler = bundle?.getString("boiler").toString()
         species = bundle?.getString("species").toString()
         status = bundle?.getString("status").toString()
-
+        status = bundle?.getString("unit").toString()
 
         val view_second = binding_second.root
         binding_second.textHeader.text = "Tallied by "+ counter_name
         setContentView(view_second)
         println(counter_name)
+
+        this_filename = tally_date + " " + counter_name + " " + ref.toString() + ".txt"
+        try{
+            val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
+            val outPutWriter = OutputStreamWriter(fileOutputStream)
+            val heading_arr= arrayOf("Cat", "Dogs", "Ponies")
+            for (child in heading_arr) {
+                outPutWriter.write(child)
+                outPutWriter.write("    ")
+            }
+            outPutWriter.close()
+            print("Successfully created .txt file")
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+    }
 
     fun handleClickButton(view: View) {
         with(view as Button) {
@@ -142,16 +161,19 @@ class SecondActivity : AppCompatActivity() {
             count_value.setText(add_count.toString())
 
             try{
-                val fileOutputStream: FileOutputStream = openFileOutput("mytextfile.txt", Context.MODE_PRIVATE)
+                val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                 val outPutWriter = OutputStreamWriter(fileOutputStream)
-                outPutWriter.write("Is This In?")
+                val append_arr = arrayOf("Rats", "Bats", "Dragons")
+                outPutWriter.append("\n")
+                for (child in append_arr) {
+                    outPutWriter.append(child)
+                    outPutWriter.append("    ")
+                }
                 outPutWriter.close()
                 print("Successfully created .txt file")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
-
 
             println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
         }
