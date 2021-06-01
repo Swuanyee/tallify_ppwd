@@ -61,6 +61,15 @@ class MainActivity : AppCompatActivity() {
         binding.btnTally.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val m_intent = Intent(this@MainActivity, SecondActivity::class.java)
+                val m_bundle = Bundle()
+                m_bundle.putString("name", binding.inputName.text.toString())
+                m_bundle.putString("supplier", binding.inputSupplier.text.toString())
+                m_bundle.putString("invoice", binding.inputInvoiceNum.text.toString())
+                m_bundle.putInt("ref", binding.inputRef.text.toString().toInt())
+                m_bundle.putString("boiler", binding.dropdownBoiler.selectedItem.toString())
+                m_bundle.putString("species", binding.dropdownSpecies.selectedItem.toString())
+                m_bundle.putString("status", binding.dropdownStatus.selectedItem.toString())
+                m_intent.putExtra("main_activity_data", m_bundle)
                 startActivity(m_intent)
             }
         })
