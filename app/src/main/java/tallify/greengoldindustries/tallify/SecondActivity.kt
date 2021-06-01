@@ -33,6 +33,7 @@ class SecondActivity : AppCompatActivity() {
     var boiler = "String"
     var species = "String"
     var status = "String"
+    var measurement_unit = "String"
 
     var this_filename = "String"
 
@@ -111,7 +112,7 @@ class SecondActivity : AppCompatActivity() {
         boiler = bundle?.getString("boiler").toString()
         species = bundle?.getString("species").toString()
         status = bundle?.getString("status").toString()
-        status = bundle?.getString("unit").toString()
+        measurement_unit = bundle?.getString("unit").toString()
 
         val view_second = binding_second.root
         binding_second.textHeader.text = "Tallied by "+ counter_name
@@ -122,10 +123,11 @@ class SecondActivity : AppCompatActivity() {
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
-            val heading_arr= arrayOf("Cat", "Dogs", "Ponies")
+            val heading_arr= arrayOf("Date","Reference","Name", "Supplier", "Species","Status","Grade", "Unit",
+            "W", "T", "L", "CBT/CBM", "Boiler", "Quantity")
             for (child in heading_arr) {
                 outPutWriter.write(child)
-                outPutWriter.write("    ")
+                outPutWriter.write(",")
             }
             outPutWriter.close()
             print("Successfully created .txt file")
@@ -159,15 +161,29 @@ class SecondActivity : AppCompatActivity() {
             var add_count = count_value.text.toString().toInt()
             add_count += 1
             count_value.setText(add_count.toString())
-
+            ref += 1
             try{
                 val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                 val outPutWriter = OutputStreamWriter(fileOutputStream)
-                val append_arr = arrayOf("Rats", "Bats", "Dragons")
+                val append_arr = arrayOf(tally_date,
+                    ref.toString(),
+                    counter_name,
+                    supplier_name,
+                    species,
+                    status,
+                    view.text,
+                    measurement_unit,
+                    width_value.text,
+                    thickness_value.text,
+                    length_value.text,
+                    "Tonnage",
+                    boiler,
+                    "1"
+                )
                 outPutWriter.append("\n")
                 for (child in append_arr) {
                     outPutWriter.append(child)
-                    outPutWriter.append("    ")
+                    outPutWriter.append(",")
                 }
                 outPutWriter.close()
                 print("Successfully created .txt file")
@@ -179,55 +195,64 @@ class SecondActivity : AppCompatActivity() {
         }
     }
 
-    fun handleSubtractButton (view: View) {
-        with (view as Button) {
-            var this_btn = view.resources.getResourceEntryName(id)
+
+    fun handleSubtractButton(view: View) {
+        with(view as Button) {
+            println("handle clicks")
+            val this_btn = view.resources.getResourceEntryName(id)
             val id_string = this_btn
             val delim = "_"
             val arr = id_string.split(delim).toTypedArray()
-            val id_num = arr[2]
-            println(counter_name)
+
+            val this_width= "input_w_" + arr[2]
+            val this_thickness= "input_t_" + arr[2]
+            val this_length= "input_l_" + arr[2]
+            val this_count = "text_count_" + arr[2]
+
+            val width_id = resources.getIdentifier(this_width, "id", context.packageName)
+            val thickness_id = resources.getIdentifier(this_thickness, "id", context.packageName)
+            val length_id = resources.getIdentifier(this_length, "id", context.packageName)
+            val count_id = resources.getIdentifier(this_count, "id", context.packageName)
+
+            var width_value = this@SecondActivity.findViewById<EditText>(width_id)
+            var thickness_value = this@SecondActivity.findViewById<EditText>(thickness_id)
+            var length_value = this@SecondActivity.findViewById<EditText>(length_id)
+            var count_value = this@SecondActivity.findViewById<TextView>(count_id)
+            var add_count = count_value.text.toString().toInt()
+            add_count -= 1
+            count_value.setText(add_count.toString())
+            ref -= 1
+            try{
+                val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                val outPutWriter = OutputStreamWriter(fileOutputStream)
+                val append_arr = arrayOf(tally_date,
+                    "NA",
+                    counter_name,
+                    supplier_name,
+                    species,
+                    status,
+                    view.text,
+                    measurement_unit,
+                    width_value.text,
+                    thickness_value.text,
+                    length_value.text,
+                    "Tonnage",
+                    boiler,
+                    "-1"
+                )
+                outPutWriter.append("\n")
+                for (child in append_arr) {
+                    outPutWriter.append(child)
+                    outPutWriter.append(",")
+                }
+                outPutWriter.close()
+                print("Successfully created .txt file")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
         }
     }
-/**
-    fun container_one (view: View) {
-         with (view as Button) {
-             var this_btn = view.getText().toString()
-             var arr_0 = arrayOf(
-                 counter_name,
-                 supplier_name,
-                 ref,
-                 species,
-                 status,
-                 this_btn,
-                 binding_second.inputT0.text,
-                 binding_second.inputW0.text,
-                 binding_second.inputT0.text,binding_second.inputL0.text,
-                 boiler
-             )
-             println("hello")
-             if (this_btn != "-") {
-                 ref += 1
-                 count_0 += 1
-                 binding_second.textCount0.setText(count_0.toString())
-                 arr_0 = arrayOf(
-                     counter_name,
-                     supplier_name,
-                     ref,
-                     species,
-                     status,
-                     this_btn,
-                     binding_second.inputT0.text,
-                     binding_second.inputW0.text,
-                     binding_second.inputT0.text,binding_second.inputL0.text,
-                     boiler
-                 )
-             }
-             else {
-                 ref -= 1
-                 count_0 -= 1
-                 binding_second.textCount0.setText(count_0.toString())
-             }
-         }
-    } **/
+
 }
