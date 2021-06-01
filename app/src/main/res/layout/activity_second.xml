@@ -51,6 +51,7 @@
 
                     <TextView
                         android:id="@+id/text_w_0"
+                        android:tag="width"
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -173,7 +174,7 @@
                         android:layout_height="50dp"
                         android:layout_marginRight="2dp"
                         android:layout_weight="1"
-                        android:onClick="handleSubtractButton"
+                        android:onClick="handleClickButton"
                         android:text="-" />
                 </LinearLayout>
             </LinearLayout>
