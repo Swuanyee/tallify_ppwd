@@ -1,6 +1,7 @@
 package tallify.greengoldindustries.tallify
 
 import android.content.Context
+import android.content.Intent
 import android.icu.util.Output
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -134,6 +135,13 @@ class SecondActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        binding_second.btnDone.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val m_intent = Intent(this@SecondActivity, MainActivity::class.java)
+                startActivity(m_intent)
+            }
+        })
     }
 
     fun handleClickButton(view: View) {
