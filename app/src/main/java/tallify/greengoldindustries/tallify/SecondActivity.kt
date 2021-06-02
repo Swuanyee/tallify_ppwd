@@ -16,7 +16,6 @@ import android.widget.TextView
 import org.apache.poi.hssf.usermodel.HSSFCellStyle
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.hssf.util.HSSFColor
-import org.apache.poi.ss.usermodel.CellStyle
 import tallify.greengoldindustries.tallify.databinding.ActivityMainBinding
 import tallify.greengoldindustries.tallify.databinding.ActivitySecondBinding
 import tallify.greengoldindustries.tallify.databinding.MeasurementFormsBinding
@@ -83,7 +82,7 @@ class SecondActivity : AppCompatActivity() {
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
-            val heading_arr= arrayOf("Date","Reference","Name", "Supplier", "Species","Status","Grade", "Unit",
+            val heading_arr= arrayOf("Date","Reference","Name", "Supplier","Order", "Species","Status","Grade", "Unit",
             "W", "T", "L", "CBT/CBM", "Boiler", "Quantity")
             for (child in heading_arr) {
                 outPutWriter.write(child)
@@ -109,60 +108,6 @@ class SecondActivity : AppCompatActivity() {
             println(view.id)
             val this_btn = view.resources.getResourceEntryName(id)
             println(this_btn.toString())
-            /**
-            val id_string = this_btn
-            val delim = "_"
-            val arr = id_string.split(delim).toTypedArray()
-
-            val this_width= "input_w_" + arr[2]
-            val this_thickness= "input_t_" + arr[2]
-            val this_length= "input_l_" + arr[2]
-            val this_count = "text_count_" + arr[2]
-
-            val width_id = resources.getIdentifier(this_width, "id", context.packageName)
-            val thickness_id = resources.getIdentifier(this_thickness, "id", context.packageName)
-            val length_id = resources.getIdentifier(this_length, "id", context.packageName)
-            val count_id = resources.getIdentifier(this_count, "id", context.packageName)
-
-            var width_value = this@SecondActivity.findViewById<EditText>(width_id)
-            var thickness_value = this@SecondActivity.findViewById<EditText>(thickness_id)
-            var length_value = this@SecondActivity.findViewById<EditText>(length_id)
-            var count_value = this@SecondActivity.findViewById<TextView>(count_id)
-            var add_count = count_value.text.toString().toInt()
-            add_count += 1
-            count_value.setText(add_count.toString())
-            ref += 1
-            try{
-                val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                val outPutWriter = OutputStreamWriter(fileOutputStream)
-                val append_arr = arrayOf(tally_date,
-                    ref.toString(),
-                    counter_name,
-                    supplier_name,
-                    species,
-                    status,
-                    view.text,
-                    measurement_unit,
-                    width_value.text,
-                    thickness_value.text,
-                    length_value.text,
-                    "Tonnage",
-                    boiler,
-                    "1"
-                )
-                outPutWriter.append("\n")
-                for (child in append_arr) {
-                    outPutWriter.append(child)
-                    outPutWriter.append(",")
-                }
-                outPutWriter.close()
-                print("Successfully created .txt file")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
-            **/
         }
     }
     fun handleAddTally(view: View) {
