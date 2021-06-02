@@ -2,10 +2,12 @@ package tallify.greengoldindustries.tallify
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.icu.util.Output
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.text.InputType
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -36,74 +38,31 @@ class SecondActivity : AppCompatActivity() {
     var status = "String"
     var measurement_unit = "String"
 
+    var btn_count = 0
+
     var this_filename = "String"
+
+    var width_count = 10000
+    var thickness_count = 20000
+    var length_count = 30000
+    var orderName_count = 400000
+    var count_count = 50000
+
+    var a_count = 11000
+    var b_count = 21000
+    var c_count = 31000
+    var q_count = 41000
+    var r_count = 51000
+    var u_count = 61000
+    var subtract_count = 71000
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding_second = ActivitySecondBinding.inflate(layoutInflater)
         binding_template = MeasurementFormsBinding.inflate(layoutInflater)
-        /**
-        count_0 = binding_second.textCount0.text.toString().toInt()
-        count_2 = binding_second.textCount2.text.toString().toInt()
-        count_3 = binding_second.textCount3.text.toString().toInt()
-        count_4 = binding_second.textCount4.text.toString().toInt()
-        count_5 = binding_second.textCount5.text.toString().toInt()
-        count_6 = binding_second.textCount6.text.toString().toInt()
-        count_7 = binding_second.textCount7.text.toString().toInt()
-        count_8 = binding_second.textCount8.text.toString().toInt()
-        count_9 = binding_second.textCount9.text.toString().toInt()
-        count_10 = binding_second.textCount10.text.toString().toInt()
-        count_11 = binding_second.textCount11.text.toString().toInt()
-        count_12 = binding_second.textCount12.text.toString().toInt()
-        count_13 = binding_second.textCount13.text.toString().toInt()
-        count_14 = binding_second.textCount14.text.toString().toInt()
 
-        width_0 = binding_second.textW0.text.toString().toInt()
-        width_2 = binding_second.textW2.text.toString().toInt()
-        width_3 = binding_second.textW3.text.toString().toInt()
-        width_4 = binding_second.textW4.text.toString().toInt()
-        width_5 = binding_second.textW5.text.toString().toInt()
-        width_6 = binding_second.textW6.text.toString().toInt()
-        width_7 = binding_second.textW7.text.toString().toInt()
-        width_8 = binding_second.textW8.text.toString().toInt()
-        width_9 = binding_second.textW9.text.toString().toInt()
-        width_10 = binding_second.textW10.text.toString().toInt()
-        width_11 = binding_second.textW11.text.toString().toInt()
-        width_12 = binding_second.textW12.text.toString().toInt()
-        width_13 = binding_second.textW13.text.toString().toInt()
-        width_14 = binding_second.textW14.text.toString().toInt()
-
-        thickness_0 = binding_second.textT0.text.toString().toInt()
-        thickness_2 = binding_second.textT2.text.toString().toInt()
-        thickness_3 = binding_second.textT3.text.toString().toInt()
-        thickness_4 = binding_second.textT4.text.toString().toInt()
-        thickness_5 = binding_second.textT5.text.toString().toInt()
-        thickness_6 = binding_second.textT6.text.toString().toInt()
-        thickness_7 = binding_second.textT7.text.toString().toInt()
-        thickness_8 = binding_second.textT8.text.toString().toInt()
-        thickness_9 = binding_second.textT9.text.toString().toInt()
-        thickness_10 = binding_second.textT10.text.toString().toInt()
-        thickness_11 = binding_second.textT11.text.toString().toInt()
-        thickness_12 = binding_second.textT12.text.toString().toInt()
-        thickness_13 = binding_second.textT13.text.toString().toInt()
-        thickness_14 = binding_second.textT14.text.toString().toInt()
-
-        length_0 = binding_second.textL0.text.toString().toInt()
-        length_2 = binding_second.textL2.text.toString().toInt()
-        length_3 = binding_second.textL3.text.toString().toInt()
-        length_4 = binding_second.textL4.text.toString().toInt()
-        length_5 = binding_second.textL5.text.toString().toInt()
-        length_6 = binding_second.textL6.text.toString().toInt()
-        length_7 = binding_second.textL7.text.toString().toInt()
-        length_8 = binding_second.textL8.text.toString().toInt()
-        length_9 = binding_second.textL9.text.toString().toInt()
-        length_10 = binding_second.textL10.text.toString().toInt()
-        length_11 = binding_second.textL11.text.toString().toInt()
-        length_12 = binding_second.textL12.text.toString().toInt()
-        length_13 = binding_second.textL13.text.toString().toInt()
-        length_14 = binding_second.textL14.text.toString().toInt()
-        **/
         val bundle = intent.getBundleExtra("main_activity_data")
         counter_name = bundle?.getString("name").toString()
         tally_date = bundle?.getString("date").toString()
@@ -147,7 +106,10 @@ class SecondActivity : AppCompatActivity() {
     fun handleClickButton(view: View) {
         with(view as Button) {
             println("handle clicks")
+            println(view.id)
             val this_btn = view.resources.getResourceEntryName(id)
+            println(this_btn.toString())
+            /**
             val id_string = this_btn
             val delim = "_"
             val arr = id_string.split(delim).toTypedArray()
@@ -200,6 +162,369 @@ class SecondActivity : AppCompatActivity() {
             }
 
             println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
+            **/
+        }
+    }
+    fun handleAddTally(view: View) {
+        with(view as Button) {
+            btn_count += 1
+
+            val this_btn = view.resources.getResourceEntryName(id)
+            var container_overall = LinearLayout(this@SecondActivity)
+            container_overall.setOrientation(LinearLayout.VERTICAL)
+
+            var container_inputs= LinearLayout(this@SecondActivity)
+            container_inputs.setOrientation(LinearLayout.HORIZONTAL)
+            var text_width= TextView(this@SecondActivity)
+            text_width.setText("W:")
+            var input_width= EditText(this@SecondActivity)
+            text_width.setWidth(30)
+            input_width.setWidth(90)
+            input_width.id = width_count+btn_count
+
+            var text_thickness= TextView(this@SecondActivity)
+            text_thickness.setText("T:")
+            var input_thickness= EditText(this@SecondActivity)
+            text_thickness.setWidth(30)
+            input_thickness.setWidth(90)
+            input_thickness.id = thickness_count+btn_count
+
+            var text_length= TextView(this@SecondActivity)
+            text_length.setText("L:")
+            var input_length= EditText(this@SecondActivity)
+            text_length.setWidth(30)
+            input_length.setWidth(90)
+            input_length.id = length_count+btn_count
+
+            var text_count= TextView(this@SecondActivity)
+            text_count.setText("0")
+            text_count.setWidth(50)
+            text_count.id = count_count + btn_count
+
+            container_inputs.addView(text_width)
+            container_inputs.addView(input_width)
+            container_inputs.addView(text_thickness)
+            container_inputs.addView(input_thickness)
+            container_inputs.addView(text_length)
+            container_inputs.addView(input_length)
+            container_inputs.addView(text_count)
+
+            container_overall.addView(container_inputs)
+
+            var container_orderName= LinearLayout(this@SecondActivity)
+            container_orderName.setOrientation(LinearLayout.HORIZONTAL)
+            var text_orderName= TextView(this@SecondActivity)
+            text_orderName.setText("Order Name:")
+            var input_orderName= EditText(this@SecondActivity)
+            text_orderName.setWidth(150)
+            input_orderName.setWidth(250)
+            input_orderName.setText("NA")
+            input_orderName.setId(orderName_count+btn_count)
+
+            container_orderName.addView(text_orderName)
+            container_orderName.addView(input_orderName)
+            container_overall.addView(container_orderName)
+
+            var container_buttons= LinearLayout(this@SecondActivity)
+            container_buttons.setOrientation(LinearLayout.HORIZONTAL)
+            var btn_a = Button(this@SecondActivity)
+            btn_a.id = a_count + btn_count
+
+            btn_a.setOnClickListener(View.OnClickListener { view ->
+                println("Clicked btn A")
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                println("Clicked btn A")
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "A",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+
+            var btn_b = Button(this@SecondActivity)
+            btn_b.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "B",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+            var btn_c = Button(this@SecondActivity)
+            btn_c.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "C",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+            var btn_q = Button(this@SecondActivity)
+            btn_q.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "Q",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+            var btn_r = Button(this@SecondActivity)
+            btn_r.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "R",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+            var btn_u = Button(this@SecondActivity)
+            btn_u.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                text_count.setText(num_of_wood.toString())
+                ref += 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "U",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+            var btn_subtract = Button(this@SecondActivity)
+            btn_subtract.setOnClickListener(View.OnClickListener { view ->
+                var num_of_wood = text_count.text.toString().toInt() - 1
+                text_count.setText(num_of_wood.toString())
+                ref -= 1
+                print(text_count.text)
+                try{
+                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+                    val outPutWriter = OutputStreamWriter(fileOutputStream)
+                    val append_arr = arrayOf(tally_date,
+                        ref.toString(),
+                        counter_name,
+                        supplier_name,
+                        input_orderName.text,
+                        species,
+                        status,
+                        "NA",
+                        measurement_unit,
+                        input_width.text,
+                        input_thickness.text,
+                        input_length.text,
+                        "Tonnage",
+                        boiler,
+                        "-1"
+                    )
+                    outPutWriter.append("\n")
+                    for (child in append_arr) {
+                        outPutWriter.append(child)
+                        outPutWriter.append(",")
+                    }
+                    outPutWriter.close()
+                    print("\n Closing outputwrite")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                input_orderName.setText("NA")
+            })
+
+            btn_a.setText("A")
+            btn_b.setText("B")
+            btn_c.setText("C")
+            btn_q.setText("Q")
+            btn_r.setText("R")
+            btn_u.setText("U")
+            btn_subtract.setText("-")
+
+            btn_a.id = a_count + btn_count
+            var btn_a_int = a_count + btn_count
+            btn_a.setTag(btn_a_int.toString())
+            println(btn_a.id)
+            btn_b.id = b_count + btn_count
+            btn_c.id = c_count + btn_count
+            btn_q.id = q_count + btn_count
+            btn_r.id = r_count + btn_count
+            btn_u.id = u_count + btn_count
+            btn_subtract.id = subtract_count + btn_count
+
+            container_buttons.addView(btn_a)
+            container_buttons.addView(btn_b)
+            container_buttons.addView(btn_c)
+            container_buttons.addView(btn_q)
+            container_overall.addView(container_buttons)
+
+            var container_subtract= LinearLayout(this@SecondActivity)
+            container_subtract.setOrientation(LinearLayout.HORIZONTAL)
+            container_subtract.addView(btn_r)
+            container_subtract.addView(btn_u)
+            container_subtract.addView(btn_subtract)
+            container_overall.addView(container_subtract)
+
+            binding_second.containerWhole.addView(container_overall)
         }
     }
 
@@ -207,6 +532,7 @@ class SecondActivity : AppCompatActivity() {
     fun handleSubtractButton(view: View) {
         with(view as Button) {
             println("handle clicks")
+            println(view.tag)
             val this_btn = view.resources.getResourceEntryName(id)
             val id_string = this_btn
             val delim = "_"
@@ -233,7 +559,8 @@ class SecondActivity : AppCompatActivity() {
             try{
                 val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                 val outPutWriter = OutputStreamWriter(fileOutputStream)
-                val append_arr = arrayOf(tally_date,
+                val append_arr = arrayOf(
+                    tally_date,
                     "NA",
                     counter_name,
                     supplier_name,

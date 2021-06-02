@@ -10,126 +10,137 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/container_wxt"
+            android:id="@+id/container_wxt_0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_w"
+                android:id="@+id/text_w_0"
+                android:tag="width"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Width" />
+                android:text="W:"
+                android:textAlignment="viewEnd" />
 
             <EditText
-                android:id="@+id/input_w"
-                android:layout_width="120dp"
+                android:id="@+id/input_w_0"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="number" />
 
             <TextView
-                android:id="@+id/text_t"
-                android:layout_width="53dp"
+                android:id="@+id/text_t_0"
+                android:layout_width="13dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Thickness" />
+                android:text="T:"
+                android:textAlignment="viewEnd" />
 
             <EditText
-                android:id="@+id/input_t"
-                android:layout_width="120dp"
+                android:id="@+id/input_t_0"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="number" />
 
+            <TextView
+                android:id="@+id/text_l_0"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="L:"
+                android:textAlignment="viewEnd" />
+
+            <EditText
+                android:id="@+id/input_l_0"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/text_count_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0" />
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_addLength"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add Length" />
-
         <LinearLayout
-            android:id="@+id/container_length"
+            android:id="@+id/container_length_0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerPadding="5dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text_l"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="L" />
-
-            <EditText
-                android:id="@+id/input_l"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number" />
-
             <Button
-                android:id="@+id/btn_a"
+                android:id="@+id/btn_a_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="A" />
 
             <Button
-                android:id="@+id/btn_b"
+                android:id="@+id/btn_b_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="B" />
 
             <Button
-                android:id="@+id/btn_c"
+                android:id="@+id/btn_c_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="C" />
 
             <Button
-                android:id="@+id/btn_q"
+                android:id="@+id/btn_q_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="Q" />
 
             <Button
-                android:id="@+id/btn_r"
+                android:id="@+id/btn_r_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="R" />
 
             <Button
-                android:id="@+id/btn_u"
+                android:id="@+id/btn_u_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleClickButton"
                 android:text="U" />
 
             <Button
-                android:id="@+id/btn_subtract"
+                android:id="@+id/btn_subtract_0"
                 android:layout_width="55dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
+                android:onClick="handleSubtractButton"
                 android:text="-" />
         </LinearLayout>
     </LinearLayout>
