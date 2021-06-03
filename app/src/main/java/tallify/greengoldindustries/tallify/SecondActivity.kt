@@ -211,7 +211,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
 
             var btn_b = Button(this@SecondActivity)
@@ -249,7 +249,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
             var btn_c = Button(this@SecondActivity)
             btn_c.setOnClickListener(View.OnClickListener { view ->
@@ -286,7 +286,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
             var btn_q = Button(this@SecondActivity)
             btn_q.setOnClickListener(View.OnClickListener { view ->
@@ -323,7 +323,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
             var btn_r = Button(this@SecondActivity)
             btn_r.setOnClickListener(View.OnClickListener { view ->
@@ -360,7 +360,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
             var btn_u = Button(this@SecondActivity)
             btn_u.setOnClickListener(View.OnClickListener { view ->
@@ -397,7 +397,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
             var btn_subtract = Button(this@SecondActivity)
             btn_subtract.setOnClickListener(View.OnClickListener { view ->
@@ -434,7 +434,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                input_orderName.setText("NA")
+                //input_orderName.setText("NA")
             })
 
             btn_a.setText("A")
