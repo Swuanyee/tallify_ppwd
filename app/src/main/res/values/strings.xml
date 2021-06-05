@@ -15,8 +15,8 @@
     </string-array>
     <string-array name="log_type">
         <item>Log</item>
+        <item>Conversion</item>
         <item>S4S</item>
-        <item>Sawn</item>
     </string-array>
     <string-array name="unit">
         <item>Imperial</item>

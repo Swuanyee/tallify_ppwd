@@ -2,6 +2,7 @@ package tallify.greengoldindustries.tallify
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.icu.util.Output
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +56,11 @@ class SecondActivity : AppCompatActivity() {
     var u_count = 61000
     var subtract_count = 71000
 
+    var total_ton = 0.000000
+    var total_pieces = 0
+
+    var this_dir = "None"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +80,12 @@ class SecondActivity : AppCompatActivity() {
         measurement_unit = bundle?.getString("unit").toString()
 
         val view_second = binding_second.root
-        binding_second.textHeader.text = "Tallied by "+ counter_name
         setContentView(view_second)
         println(counter_name)
 
-        this_filename = tally_date + " " + counter_name + " " + ref.toString() + ".txt"
+        this_filename = counter_name + " " + ref.toString() + ".txt"
+
+        println(this_dir)
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -93,23 +100,18 @@ class SecondActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         binding_second.btnDone.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
+                var this_dir = getExternalFilesDir(this_filename)
+                var target_dir = File("sdcard/Download/"+ this_filename)
+                this_dir?.copyTo(target_dir)
+                println("Copy succeeded")
                 val m_intent = Intent(this@SecondActivity, MainActivity::class.java)
                 startActivity(m_intent)
             }
         })
     }
 
-    fun handleClickButton(view: View) {
-        with(view as Button) {
-            println("handle clicks")
-            println(view.id)
-            val this_btn = view.resources.getResourceEntryName(id)
-            println(this_btn.toString())
-        }
-    }
     fun handleAddTally(view: View) {
         with(view as Button) {
             btn_count += 1
@@ -125,6 +127,8 @@ class SecondActivity : AppCompatActivity() {
             var input_width= EditText(this@SecondActivity)
             text_width.setWidth(30)
             input_width.setWidth(90)
+            input_width.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL)
+            input_width.setRawInputType(Configuration.KEYBOARD_12KEY)
             input_width.id = width_count+btn_count
 
             var text_thickness= TextView(this@SecondActivity)
@@ -132,14 +136,21 @@ class SecondActivity : AppCompatActivity() {
             var input_thickness= EditText(this@SecondActivity)
             text_thickness.setWidth(30)
             input_thickness.setWidth(90)
-            input_thickness.id = thickness_count+btn_count
+            input_thickness.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL)
+            input_thickness.setRawInputType(Configuration.KEYBOARD_12KEY)
+            if (status == "Log") {
+                input_thickness.setText("0")
+            } else {
+                input_thickness.setText("")
+            }
 
             var text_length= TextView(this@SecondActivity)
             text_length.setText("L:")
             var input_length= EditText(this@SecondActivity)
             text_length.setWidth(30)
             input_length.setWidth(90)
-            input_length.id = length_count+btn_count
+            input_length.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL)
+            input_length.setRawInputType(Configuration.KEYBOARD_12KEY)
 
             var text_count= TextView(this@SecondActivity)
             text_count.setText("0")
@@ -177,8 +188,81 @@ class SecondActivity : AppCompatActivity() {
 
             btn_a.setOnClickListener(View.OnClickListener { view ->
                 println("Clicked btn A")
-                var num_of_wood = text_count.text.toString().toInt() + 1
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
                 println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                    print(width_inches)
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                    print(length_inches)
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                   ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+
+                var num_of_wood = text_count.text.toString().toInt() + 1
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
+
                 text_count.setText(num_of_wood.toString())
                 ref += 1
                 print(text_count.text)
@@ -197,7 +281,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -216,6 +300,77 @@ class SecondActivity : AppCompatActivity() {
 
             var btn_b = Button(this@SecondActivity)
             btn_b.setOnClickListener(View.OnClickListener { view ->
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
@@ -235,7 +390,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -253,6 +408,77 @@ class SecondActivity : AppCompatActivity() {
             })
             var btn_c = Button(this@SecondActivity)
             btn_c.setOnClickListener(View.OnClickListener { view ->
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
@@ -272,7 +498,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -290,6 +516,77 @@ class SecondActivity : AppCompatActivity() {
             })
             var btn_q = Button(this@SecondActivity)
             btn_q.setOnClickListener(View.OnClickListener { view ->
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
@@ -309,7 +606,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -327,6 +624,77 @@ class SecondActivity : AppCompatActivity() {
             })
             var btn_r = Button(this@SecondActivity)
             btn_r.setOnClickListener(View.OnClickListener { view ->
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
@@ -346,7 +714,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -364,6 +732,77 @@ class SecondActivity : AppCompatActivity() {
             })
             var btn_u = Button(this@SecondActivity)
             btn_u.setOnClickListener(View.OnClickListener { view ->
+                total_pieces += 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton += ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
@@ -383,7 +822,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "1"
                     )
@@ -401,6 +840,77 @@ class SecondActivity : AppCompatActivity() {
             })
             var btn_subtract = Button(this@SecondActivity)
             btn_subtract.setOnClickListener(View.OnClickListener { view ->
+                total_pieces -= 1
+                binding_second.totalNumPieces.setText(total_pieces.toString())
+                var delim = "."
+                var width_feet = 0
+                var width_inches = 0
+                var thickness_feet = 0
+                var thickness_inches = 0
+                var length_feet = 0
+                var length_inches = 0
+                var ton = 0.000000
+
+                var width_arr = input_width.text.toString().split(delim)
+                var thickness_arr = input_thickness.text.toString().split(delim)
+                var length_arr = input_length.text.toString().split(delim)
+
+                width_feet = width_arr[0].toInt()
+                thickness_feet = thickness_arr[0].toInt()
+                length_feet = length_arr[0].toInt()
+                println("Clicked btn A")
+                try {
+                    width_inches = width_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    thickness_inches = thickness_arr[1].toInt()
+                } catch(e: Exception) {}
+                try {
+                    length_inches = length_arr[1].toInt()
+                } catch(e: Exception) {}
+
+                println(length_feet)
+                println(length_inches)
+
+                if (status == "Log" && measurement_unit == "Imperial") {
+                    var girdth_width = width_feet * 12 + width_inches
+                    var log_length = input_length.text.toString().toDouble()
+                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton -= ton
+                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton -= ton
+                    println(this_width)
+                    println(this_thickness)
+                    println(this_length)
+                    println(ton.toString())
+                    println(total_ton.toString())
+                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton -= ton
+                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = 0.000000
+                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton -= ton
+                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    var this_width = input_width.text.toString().toDouble()
+                    var this_thickness = input_thickness.text.toString().toDouble()
+                    var this_length = input_length.text.toString().toDouble()
+                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    total_ton -= ton
+                }
+
+                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() - 1
                 text_count.setText(num_of_wood.toString())
                 ref -= 1
@@ -420,7 +930,7 @@ class SecondActivity : AppCompatActivity() {
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
-                        "Tonnage",
+                        "%.5f".format(ton).toString(),
                         boiler,
                         "-1"
                     )
