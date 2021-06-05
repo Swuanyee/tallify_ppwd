@@ -41,6 +41,7 @@ class SecondActivity : AppCompatActivity() {
     var btn_count = 0
 
     var this_filename = "String"
+    var this_path= "/storage/emulated/0/Download/"
 
     var width_count = 10000
     var thickness_count = 20000
@@ -83,7 +84,7 @@ class SecondActivity : AppCompatActivity() {
         setContentView(view_second)
         println(counter_name)
 
-        this_filename = counter_name + " " + ref.toString() + ".txt"
+        this_filename = counter_name + "_" + ref.toString() + ".txt"
 
         println(this_dir)
         try{
@@ -102,10 +103,15 @@ class SecondActivity : AppCompatActivity() {
         }
         binding_second.btnDone.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var this_dir = getExternalFilesDir(this_filename)
-                var target_dir = File("sdcard/Download/"+ this_filename)
-                this_dir?.copyTo(target_dir)
-                println("Copy succeeded")
+                println(getExternalFilesDir(null))
+                var source_file= File("/data/data/tallify.greengoldindustries.tallify/files/" + this_filename)
+                var target_file= File("/storage/emulated/0/Download/" + this_filename)
+                println(target_file.canWrite())
+                try {
+                    source_file.copyTo(target_file)
+                } catch (e: java.lang.Exception) {
+                    println(e)
+                }
                 val m_intent = Intent(this@SecondActivity, MainActivity::class.java)
                 startActivity(m_intent)
             }
