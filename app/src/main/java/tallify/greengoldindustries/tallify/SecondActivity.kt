@@ -158,10 +158,20 @@ class SecondActivity : AppCompatActivity() {
             input_length.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL)
             input_length.setRawInputType(Configuration.KEYBOARD_12KEY)
 
+            var text_unit= TextView(this@SecondActivity)
+            text_unit.setText("Unit:")
+            var input_unit= EditText(this@SecondActivity)
+            if (measurement_unit == "Imperial") {
+                input_unit.setText("ft")
+            } else {
+                input_unit.setText("mm")
+            }
+            text_unit.setWidth(50)
+            input_unit.setWidth(70)
+
             var text_count= TextView(this@SecondActivity)
             text_count.setText("0")
             text_count.setWidth(50)
-            text_count.id = count_count + btn_count
 
             container_inputs.addView(text_width)
             container_inputs.addView(input_width)
@@ -169,6 +179,8 @@ class SecondActivity : AppCompatActivity() {
             container_inputs.addView(input_thickness)
             container_inputs.addView(text_length)
             container_inputs.addView(input_length)
+            container_inputs.addView(text_unit)
+            container_inputs.addView(input_unit)
             container_inputs.addView(text_count)
 
             container_overall.addView(container_inputs)
@@ -224,44 +236,36 @@ class SecondActivity : AppCompatActivity() {
                     print(length_inches)
                 } catch(e: Exception) {}
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                    ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -283,7 +287,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "A",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -338,41 +342,36 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -392,7 +391,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "B",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -446,41 +445,36 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -500,7 +494,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "C",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -554,41 +548,36 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -608,7 +597,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "Q",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -648,7 +637,6 @@ class SecondActivity : AppCompatActivity() {
                 width_feet = width_arr[0].toInt()
                 thickness_feet = thickness_arr[0].toInt()
                 length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
                     width_inches = width_arr[1].toInt()
                 } catch(e: Exception) {}
@@ -662,41 +650,36 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -716,7 +699,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "R",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -770,41 +753,36 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
                     ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
                     total_ton += ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
+                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
                     total_ton += ton
                 }
 
@@ -824,7 +802,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "U",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
@@ -878,42 +856,37 @@ class SecondActivity : AppCompatActivity() {
                 println(length_feet)
                 println(length_inches)
 
-                if (status == "Log" && measurement_unit == "Imperial") {
+                if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
                     var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton -= ton
-                } else if (status == "Conversion" && measurement_unit == "Imperial") {
+                    ton = (-1 * girdth_width * girdth_width * log_length / 115200).toDouble()
+                    total_ton += ton
+                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton -= ton
-                    println(this_width)
-                    println(this_thickness)
-                    println(this_length)
-                    println(ton.toString())
-                    println(total_ton.toString())
-                } else if (status == "S4S" && measurement_unit == "Imperial") {
+                    ton = (-1 * this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton -= ton
-                } else if (status == "Log" && measurement_unit == "Metric") {
+                    ton = (-1 * this_width * this_thickness * this_length / 7200).toDouble()
+                    total_ton += ton
+                } else if (status == "Log" && input_unit.text.toString() == "mm") {
                     ton = 0.000000
-                } else if (status == "Conversion" && measurement_unit == "Metric") {
+                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
-                    total_ton -= ton
-                } else if (status == "S4S" && measurement_unit == "Metric") {
+                    ton = (-1 * this_width * this_thickness * this_length / 1415800000).toDouble()
+                    total_ton += ton
+                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
                     var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1.4158).toDouble()
-                    total_ton -= ton
+                    ton = (-1 * this_width * this_thickness * this_length / 1415800000).toDouble()
+                    total_ton += ton
                 }
 
                 binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
@@ -932,7 +905,7 @@ class SecondActivity : AppCompatActivity() {
                         species,
                         status,
                         "NA",
-                        measurement_unit,
+                        input_unit.text,
                         input_width.text,
                         input_thickness.text,
                         input_length.text,
