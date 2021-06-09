@@ -204,6 +204,47 @@ class SecondActivity : AppCompatActivity() {
             var btn_a = Button(this@SecondActivity)
             btn_a.id = a_count + btn_count
 
+            var btn_b = Button(this@SecondActivity)
+            var btn_c = Button(this@SecondActivity)
+            var btn_q = Button(this@SecondActivity)
+            var btn_r = Button(this@SecondActivity)
+            var btn_u = Button(this@SecondActivity)
+            var btn_subtract = Button(this@SecondActivity)
+
+            btn_a.setText("A")
+            btn_b.setText("B")
+            btn_c.setText("C")
+            btn_q.setText("Q")
+            btn_r.setText("R")
+            btn_u.setText("U")
+            btn_subtract.setText("-")
+
+            btn_a.id = a_count + btn_count
+            var btn_a_int = a_count + btn_count
+            btn_a.setTag(btn_a_int.toString())
+            println(btn_a.id)
+            btn_b.id = b_count + btn_count
+            btn_c.id = c_count + btn_count
+            btn_q.id = q_count + btn_count
+            btn_r.id = r_count + btn_count
+            btn_u.id = u_count + btn_count
+            btn_subtract.id = subtract_count + btn_count
+
+            container_buttons.addView(btn_a)
+            container_buttons.addView(btn_b)
+            container_buttons.addView(btn_c)
+            container_buttons.addView(btn_q)
+            container_overall.addView(container_buttons)
+
+            var container_subtract= LinearLayout(this@SecondActivity)
+            container_subtract.setOrientation(LinearLayout.HORIZONTAL)
+            container_subtract.addView(btn_r)
+            container_subtract.addView(btn_u)
+            container_subtract.addView(btn_subtract)
+            container_overall.addView(container_subtract)
+
+            binding_second.containerWhole.addView(container_overall)
+
             btn_a.setOnClickListener(View.OnClickListener { view ->
                 println("Clicked btn A")
                 total_pieces += 1
@@ -254,7 +295,7 @@ class SecondActivity : AppCompatActivity() {
                     ton = (this_width * this_thickness * this_length / 7200).toDouble()
                     total_ton += ton
                 } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                   ton = 0.000000
+                    ton = 0.000000
                 } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
                     var this_width = input_width.text.toString().toDouble()
                     var this_thickness = input_thickness.text.toString().toDouble()
@@ -305,10 +346,16 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+                btn_a.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
                 //input_orderName.setText("NA")
             })
 
-            var btn_b = Button(this@SecondActivity)
             btn_b.setOnClickListener(View.OnClickListener { view ->
                 total_pieces += 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -410,8 +457,15 @@ class SecondActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 //input_orderName.setText("NA")
+                btn_b.setTextColor(Color.parseColor("#FF0000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
             })
-            var btn_c = Button(this@SecondActivity)
+
             btn_c.setOnClickListener(View.OnClickListener { view ->
                 total_pieces += 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -512,9 +566,16 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+                btn_c.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
                 //input_orderName.setText("NA")
             })
-            var btn_q = Button(this@SecondActivity)
+
             btn_q.setOnClickListener(View.OnClickListener { view ->
                 total_pieces += 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -616,8 +677,15 @@ class SecondActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 //input_orderName.setText("NA")
+                btn_q.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
             })
-            var btn_r = Button(this@SecondActivity)
+
             btn_r.setOnClickListener(View.OnClickListener { view ->
                 total_pieces += 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -718,8 +786,15 @@ class SecondActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 //input_orderName.setText("NA")
+                btn_r.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
             })
-            var btn_u = Button(this@SecondActivity)
+
             btn_u.setOnClickListener(View.OnClickListener { view ->
                 total_pieces += 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -821,8 +896,16 @@ class SecondActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 //input_orderName.setText("NA")
+                btn_u.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
+                btn_subtract.setTextColor(Color.parseColor("#000000"))
             })
-            var btn_subtract = Button(this@SecondActivity)
+
+
             btn_subtract.setOnClickListener(View.OnClickListener { view ->
                 total_pieces -= 1
                 binding_second.totalNumPieces.setText(total_pieces.toString())
@@ -924,41 +1007,14 @@ class SecondActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
                 //input_orderName.setText("NA")
+                btn_subtract.setTextColor(Color.parseColor("#FF0000"))
+                btn_b.setTextColor(Color.parseColor("#000000"))
+                btn_c.setTextColor(Color.parseColor("#000000"))
+                btn_q.setTextColor(Color.parseColor("#000000"))
+                btn_r.setTextColor(Color.parseColor("#000000"))
+                btn_u.setTextColor(Color.parseColor("#000000"))
+                btn_a.setTextColor(Color.parseColor("#000000"))
             })
-
-            btn_a.setText("A")
-            btn_b.setText("B")
-            btn_c.setText("C")
-            btn_q.setText("Q")
-            btn_r.setText("R")
-            btn_u.setText("U")
-            btn_subtract.setText("-")
-
-            btn_a.id = a_count + btn_count
-            var btn_a_int = a_count + btn_count
-            btn_a.setTag(btn_a_int.toString())
-            println(btn_a.id)
-            btn_b.id = b_count + btn_count
-            btn_c.id = c_count + btn_count
-            btn_q.id = q_count + btn_count
-            btn_r.id = r_count + btn_count
-            btn_u.id = u_count + btn_count
-            btn_subtract.id = subtract_count + btn_count
-
-            container_buttons.addView(btn_a)
-            container_buttons.addView(btn_b)
-            container_buttons.addView(btn_c)
-            container_buttons.addView(btn_q)
-            container_overall.addView(container_buttons)
-
-            var container_subtract= LinearLayout(this@SecondActivity)
-            container_subtract.setOrientation(LinearLayout.HORIZONTAL)
-            container_subtract.addView(btn_r)
-            container_subtract.addView(btn_u)
-            container_subtract.addView(btn_subtract)
-            container_overall.addView(container_subtract)
-
-            binding_second.containerWhole.addView(container_overall)
         }
     }
 
@@ -1019,7 +1075,6 @@ class SecondActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
         }
     }
