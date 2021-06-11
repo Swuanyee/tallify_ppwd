@@ -21,7 +21,7 @@ import tallify.greengoldindustries.tallify.databinding.ActivityMainBinding
 import tallify.greengoldindustries.tallify.databinding.ActivitySecondBinding
 import tallify.greengoldindustries.tallify.databinding.MeasurementFormsBinding
 import java.io.*
-import java.time.LocalDateTime
+import kotlin.random.Random
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding_second: ActivitySecondBinding
@@ -82,9 +82,10 @@ class SecondActivity : AppCompatActivity() {
 
         val view_second = binding_second.root
         setContentView(view_second)
+        var randomNum = Random.nextInt(1, 1000000).toString()
         println(counter_name)
 
-        this_filename = counter_name + "_" + ref.toString() + ".txt"
+        this_filename = counter_name + "_" + ref.toString() + "_" + randomNum + ".txt"
 
         println(this_dir)
         try{
