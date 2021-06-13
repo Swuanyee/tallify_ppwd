@@ -62,6 +62,8 @@ class SecondActivity : AppCompatActivity() {
 
     var this_dir = "None"
 
+    var ref_override = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +89,6 @@ class SecondActivity : AppCompatActivity() {
 
         this_filename = counter_name + "_" + ref.toString() + "_" + randomNum + ".txt"
 
-        println(this_dir)
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -191,13 +192,17 @@ class SecondActivity : AppCompatActivity() {
             var text_orderName= TextView(this@SecondActivity)
             text_orderName.setText("Order Name:")
             var input_orderName= EditText(this@SecondActivity)
-            text_orderName.setWidth(150)
-            input_orderName.setWidth(250)
+            text_orderName.setWidth(100)
+            input_orderName.setWidth(150)
             input_orderName.setText("NA")
+            var input_refChange= EditText(this@SecondActivity)
+            input_refChange.setWidth(150)
+            input_refChange.setText("NA")
             input_orderName.setId(orderName_count+btn_count)
 
             container_orderName.addView(text_orderName)
             container_orderName.addView(input_orderName)
+            container_orderName.addView(input_refChange)
             container_overall.addView(container_orderName)
 
             var container_buttons= LinearLayout(this@SecondActivity)
@@ -317,12 +322,19 @@ class SecondActivity : AppCompatActivity() {
 
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
+
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -354,6 +366,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
                 //input_orderName.setText("NA")
             })
 
@@ -427,12 +440,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -465,6 +484,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
             })
 
             btn_c.setOnClickListener(View.OnClickListener { view ->
@@ -537,12 +557,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -574,6 +600,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
                 //input_orderName.setText("NA")
             })
 
@@ -647,12 +674,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -685,6 +718,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
             })
 
             btn_r.setOnClickListener(View.OnClickListener { view ->
@@ -756,12 +790,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -794,6 +834,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_a.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
             })
 
             btn_u.setOnClickListener(View.OnClickListener { view ->
@@ -866,12 +907,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref -= 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -904,6 +951,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_a.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
+                input_refChange.setText("NA")
             })
 
 
@@ -977,12 +1025,18 @@ class SecondActivity : AppCompatActivity() {
                 var num_of_wood = text_count.text.toString().toInt() - 1
                 text_count.setText(num_of_wood.toString())
                 ref -= 1
+                if (input_refChange.text.toString() == "NA") {
+                    ref_override = ref
+                } else {
+                    ref_override = input_refChange.text.toString().toInt()
+                    ref += 1
+                }
                 print(text_count.text)
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
                     val append_arr = arrayOf(tally_date,
-                        ref.toString(),
+                        ref_override.toString(),
                         counter_name,
                         supplier_name,
                         input_orderName.text,
@@ -1015,6 +1069,8 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_a.setTextColor(Color.parseColor("#000000"))
+
+                input_refChange.setText("NA")
             })
         }
     }
