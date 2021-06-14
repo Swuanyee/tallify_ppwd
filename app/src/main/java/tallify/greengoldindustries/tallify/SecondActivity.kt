@@ -89,6 +89,10 @@ class SecondActivity : AppCompatActivity() {
 
         this_filename = counter_name + "_" + ref.toString() + "_" + randomNum + ".txt"
 
+        if (status == "Conversion") {
+            binding_second.textTotalTon.setText("Ref")
+        }
+
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -197,7 +201,8 @@ class SecondActivity : AppCompatActivity() {
             input_orderName.setText("NA")
             var input_refChange= EditText(this@SecondActivity)
             input_refChange.setWidth(150)
-            input_refChange.setText("NA")
+            input_refChange.setText("0")
+            input_refChange.setRawInputType(Configuration.KEYBOARD_12KEY)
             input_orderName.setId(orderName_count+btn_count)
 
             container_orderName.addView(text_orderName)
@@ -318,18 +323,22 @@ class SecondActivity : AppCompatActivity() {
 
 
                 var num_of_wood = text_count.text.toString().toInt() + 1
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
 
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
                 }
-
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
+                }
                 print(text_count.text)
+
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -366,7 +375,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
                 //input_orderName.setText("NA")
             })
 
@@ -436,15 +445,20 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
+                }
+
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 }
                 print(text_count.text)
                 try{
@@ -484,7 +498,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
             })
 
             btn_c.setOnClickListener(View.OnClickListener { view ->
@@ -553,17 +567,21 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
                 }
                 print(text_count.text)
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
+                }
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -600,7 +618,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
                 //input_orderName.setText("NA")
             })
 
@@ -670,17 +688,21 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
                 }
                 print(text_count.text)
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
+                }
                 try{
                     val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
                     val outPutWriter = OutputStreamWriter(fileOutputStream)
@@ -718,7 +740,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
             })
 
             btn_r.setOnClickListener(View.OnClickListener { view ->
@@ -786,15 +808,19 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
+                }
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 }
                 print(text_count.text)
                 try{
@@ -834,7 +860,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_a.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
             })
 
             btn_u.setOnClickListener(View.OnClickListener { view ->
@@ -903,15 +929,19 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() + 1
                 text_count.setText(num_of_wood.toString())
                 ref += 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref -= 1
+                }
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 }
                 print(text_count.text)
                 try{
@@ -951,7 +981,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_a.setTextColor(Color.parseColor("#000000"))
                 btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
             })
 
 
@@ -985,8 +1015,6 @@ class SecondActivity : AppCompatActivity() {
                     length_inches = length_arr[1].toInt()
                 } catch(e: Exception) {}
 
-                println(length_feet)
-                println(length_inches)
 
                 if (status == "Log" && input_unit.text.toString() == "ft") {
                     var girdth_width = width_feet * 12 + width_inches
@@ -1021,15 +1049,19 @@ class SecondActivity : AppCompatActivity() {
                     total_ton += ton
                 }
 
-                binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 var num_of_wood = text_count.text.toString().toInt() - 1
                 text_count.setText(num_of_wood.toString())
                 ref -= 1
-                if (input_refChange.text.toString() == "NA") {
+                if (input_refChange.text.toString() == "0") {
                     ref_override = ref
                 } else {
                     ref_override = input_refChange.text.toString().toInt()
                     ref += 1
+                }
+                if(status == "Conversion" || status == "S4S") {
+                    binding_second.totalNumTon.setText(ref_override.toString())
+                } else {
+                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
                 }
                 print(text_count.text)
                 try{
@@ -1070,7 +1102,7 @@ class SecondActivity : AppCompatActivity() {
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_a.setTextColor(Color.parseColor("#000000"))
 
-                input_refChange.setText("NA")
+                input_refChange.setText("0")
             })
         }
     }
