@@ -1102,71 +1102,9 @@ class SecondActivity : AppCompatActivity() {
                 btn_r.setTextColor(Color.parseColor("#000000"))
                 btn_u.setTextColor(Color.parseColor("#000000"))
                 btn_a.setTextColor(Color.parseColor("#000000"))
-
                 input_refChange.setText("0")
             })
         }
     }
-
-
-    fun handleSubtractButton(view: View) {
-        with(view as Button) {
-            println("handle clicks")
-            println(view.tag)
-            val this_btn = view.resources.getResourceEntryName(id)
-            val id_string = this_btn
-            val delim = "_"
-            val arr = id_string.split(delim).toTypedArray()
-
-            val this_width= "input_w_" + arr[2]
-            val this_thickness= "input_t_" + arr[2]
-            val this_length= "input_l_" + arr[2]
-            val this_count = "text_count_" + arr[2]
-
-            val width_id = resources.getIdentifier(this_width, "id", context.packageName)
-            val thickness_id = resources.getIdentifier(this_thickness, "id", context.packageName)
-            val length_id = resources.getIdentifier(this_length, "id", context.packageName)
-            val count_id = resources.getIdentifier(this_count, "id", context.packageName)
-
-            var width_value = this@SecondActivity.findViewById<EditText>(width_id)
-            var thickness_value = this@SecondActivity.findViewById<EditText>(thickness_id)
-            var length_value = this@SecondActivity.findViewById<EditText>(length_id)
-            var count_value = this@SecondActivity.findViewById<TextView>(count_id)
-            var add_count = count_value.text.toString().toInt()
-            add_count -= 1
-            count_value.setText(add_count.toString())
-            ref -= 1
-            try{
-                val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                val outPutWriter = OutputStreamWriter(fileOutputStream)
-                val append_arr = arrayOf(
-                    tally_date,
-                    "NA",
-                    counter_name,
-                    supplier_name,
-                    species,
-                    status,
-                    view.text,
-                    measurement_unit,
-                    width_value.text,
-                    thickness_value.text,
-                    length_value.text,
-                    "Tonnage",
-                    boiler,
-                    "-1"
-                )
-                outPutWriter.append("\n")
-                for (child in append_arr) {
-                    outPutWriter.append(child)
-                    outPutWriter.append(",")
-                }
-                outPutWriter.close()
-                print("Successfully created .txt file")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            println("W" + width_value.text + " " + "T" +  thickness_value.text+ " " + "L" + length_value.text)
-        }
     }
-
 }
