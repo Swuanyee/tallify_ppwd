@@ -203,6 +203,7 @@ class SecondActivity : AppCompatActivity() {
             input_refChange.setWidth(150)
             input_refChange.setText("0")
             input_refChange.setRawInputType(Configuration.KEYBOARD_12KEY)
+            input_refChange.setInputType(InputType.TYPE_CLASS_NUMBER)
             input_orderName.setId(orderName_count+btn_count)
 
             container_orderName.addView(text_orderName)
