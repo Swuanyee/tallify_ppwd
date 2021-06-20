@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import tallify.greengoldindustries.tallify.databinding.ActivityMainBinding
 import java.util.logging.Logger
 
@@ -72,19 +73,29 @@ class MainActivity : AppCompatActivity() {
         Log.info("onCreate")
         binding.btnTally.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                val m_intent = Intent(this@MainActivity, SecondActivity::class.java)
-                val m_bundle = Bundle()
-                m_bundle.putString("name", binding.inputName.text.toString())
-                m_bundle.putString("date", binding.inputDate.text.toString())
-                m_bundle.putString("supplier", binding.inputSupplier.text.toString())
-                m_bundle.putString("invoice", binding.inputInvoiceNum.text.toString())
-                m_bundle.putInt("ref", binding.inputRef.text.toString().toInt())
-                m_bundle.putString("boiler", binding.dropdownBoiler.selectedItem.toString())
-                m_bundle.putString("species", binding.dropdownSpecies.selectedItem.toString())
-                m_bundle.putString("status", binding.dropdownStatus.selectedItem.toString())
-                m_bundle.putString("unit", binding.dropdownMeasurement.selectedItem.toString())
-                m_intent.putExtra("main_activity_data", m_bundle)
-                startActivity(m_intent)
+                try {
+                    val m_intent = Intent(this@MainActivity, SecondActivity::class.java)
+                    val m_bundle = Bundle()
+                    m_bundle.putString("name", binding.inputName.text.toString())
+                    m_bundle.putString("date", binding.inputDate.text.toString())
+                    m_bundle.putString("supplier", binding.inputSupplier.text.toString())
+                    m_bundle.putString("invoice", binding.inputInvoiceNum.text.toString())
+                    m_bundle.putInt("ref", binding.inputRef.text.toString().toInt())
+                    m_bundle.putString("boiler", binding.dropdownBoiler.selectedItem.toString())
+                    m_bundle.putString("species", binding.dropdownSpecies.selectedItem.toString())
+                    m_bundle.putString("status", binding.dropdownStatus.selectedItem.toString())
+                    m_bundle.putString("unit", binding.dropdownMeasurement.selectedItem.toString())
+                    m_intent.putExtra("main_activity_data", m_bundle)
+                    startActivity(m_intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Warning! You have provided an invalid input! Please resubmit" +
+                                " after correcting the necessary input.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
     }

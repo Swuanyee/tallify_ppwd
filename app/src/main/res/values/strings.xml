@@ -14,9 +14,10 @@
         <item>Other Wood</item>
     </string-array>
     <string-array name="log_type">
-        <item>Log</item>
         <item>Conversion</item>
         <item>S4S</item>
+        <item>Bundle</item>
+        <item>Log</item>
     </string-array>
     <string-array name="unit">
         <item>Imperial</item>

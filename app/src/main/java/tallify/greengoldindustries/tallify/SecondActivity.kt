@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.InputType
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import org.apache.poi.hssf.usermodel.HSSFCellStyle
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.hssf.util.HSSFColor
@@ -64,19 +61,33 @@ class SecondActivity : AppCompatActivity() {
 
     var ref_override = 0
 
+    var delim = "."
+    var width_feet = 0
+    var width_inches = 0
+    var lumber_width = 1.000000
+    var thickness = 0.000000
+    var length = 0.000000
+    var ton = 0.000000
+    var width_arr = listOf<String>()
+    var log_width = "String"
+
+    var grade = "Lumber Grade"
+    var orderName = "String"
+    var unit = "String"
+
+    var refChange = "String"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding_second = ActivitySecondBinding.inflate(layoutInflater)
-        binding_template = MeasurementFormsBinding.inflate(layoutInflater)
 
         val bundle = intent.getBundleExtra("main_activity_data")
         counter_name = bundle?.getString("name").toString()
         tally_date = bundle?.getString("date").toString()
         supplier_name= bundle?.getString("supplier").toString()
         invoice = bundle?.getString("invoice").toString()
-        ref = bundle?.getInt("ref").toString().toInt()-1
+        ref = bundle?.getInt("ref").toString().toInt()
         boiler = bundle?.getString("boiler").toString()
         species = bundle?.getString("species").toString()
         status = bundle?.getString("status").toString()
@@ -89,7 +100,11 @@ class SecondActivity : AppCompatActivity() {
 
         this_filename = counter_name + "_" + ref.toString() + "_" + randomNum + ".txt"
 
-        if (status == "Conversion") {
+        if (status != "Bundle") {
+            ref -= 1
+        }
+
+        if (status == "Conversion" || status == "S4S" || status == "Bundle") {
             binding_second.textTotalTon.setText("Ref")
         }
 
@@ -97,7 +112,7 @@ class SecondActivity : AppCompatActivity() {
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
             val heading_arr= arrayOf("Date","Reference","Name", "Supplier","Order", "Species","Status","Grade", "Unit",
-            "W", "T", "L", "CBT/CBM", "Boiler", "Quantity")
+                "W", "T", "L", "CBT/CBM", "Boiler", "Quantity")
             for (child in heading_arr) {
                 outPutWriter.write(child)
                 outPutWriter.write(",")
@@ -258,853 +273,599 @@ class SecondActivity : AppCompatActivity() {
             binding_second.containerWhole.addView(container_overall)
 
             btn_a.setOnClickListener(View.OnClickListener { view ->
-                println("Clicked btn A")
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                    print(width_inches)
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                    print(length_inches)
-                } catch(e: Exception) {}
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "A"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
 
-                var num_of_wood = text_count.text.toString().toInt() + 1
-
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                print(text_count.text)
-
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "A",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+                    recordMeasurement(grade)
+
+                    btn_a.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                btn_a.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
-                //input_orderName.setText("NA")
             })
 
             btn_b.setOnClickListener(View.OnClickListener { view ->
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "B"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() + 1
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                print(text_count.text)
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "B",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+                    recordMeasurement(grade)
+                    //input_orderName.setText("NA")
+                    btn_b.setTextColor(Color.parseColor("#FF0000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                //input_orderName.setText("NA")
-                btn_b.setTextColor(Color.parseColor("#FF0000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
             })
 
             btn_c.setOnClickListener(View.OnClickListener { view ->
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "C"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() + 1
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-                print(text_count.text)
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "C",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+                    recordMeasurement(grade)
+                    btn_c.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
+                    //input_orderName.setText("NA")
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                btn_c.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
-                //input_orderName.setText("NA")
             })
 
             btn_q.setOnClickListener(View.OnClickListener { view ->
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "QS"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() + 1
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-                print(text_count.text)
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "Q",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+                    recordMeasurement(grade)
+                    //input_orderName.setText("NA")
+                    btn_q.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                //input_orderName.setText("NA")
-                btn_q.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
             })
 
             btn_r.setOnClickListener(View.OnClickListener { view ->
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "R"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() + 1
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                print(text_count.text)
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "R",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+                    recordMeasurement(grade)
+                    //input_orderName.setText("NA")
+                    btn_r.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                //input_orderName.setText("NA")
-                btn_r.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
             })
 
             btn_u.setOnClickListener(View.OnClickListener { view ->
-                total_pieces += 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "U"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-                println(length_feet)
-                println(length_inches)
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() + 1
-                text_count.setText(num_of_wood.toString())
-                ref += 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref -= 1
-                }
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                print(text_count.text)
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "U",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+                    var num_of_wood = text_count.text.toString().toInt() + 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces += 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+                    refAdded()
+
+
+                    recordMeasurement(grade)
+                    //input_orderName.setText("NA")
+                    btn_u.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    btn_subtract.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                //input_orderName.setText("NA")
-                btn_u.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                btn_subtract.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
             })
 
-
             btn_subtract.setOnClickListener(View.OnClickListener { view ->
-                total_pieces -= 1
-                binding_second.totalNumPieces.setText(total_pieces.toString())
-                var delim = "."
-                var width_feet = 0
-                var width_inches = 0
-                var thickness_feet = 0
-                var thickness_inches = 0
-                var length_feet = 0
-                var length_inches = 0
-                var ton = 0.000000
-
-                var width_arr = input_width.text.toString().split(delim)
-                var thickness_arr = input_thickness.text.toString().split(delim)
-                var length_arr = input_length.text.toString().split(delim)
-
-                width_feet = width_arr[0].toInt()
-                thickness_feet = thickness_arr[0].toInt()
-                length_feet = length_arr[0].toInt()
-                println("Clicked btn A")
                 try {
-                    width_inches = width_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    thickness_inches = thickness_arr[1].toInt()
-                } catch(e: Exception) {}
-                try {
-                    length_inches = length_arr[1].toInt()
-                } catch(e: Exception) {}
+                    lumber_width = input_width.text.toString().toDouble()
+                    thickness = input_thickness.text.toString().toDouble()
+                    length = input_length.text.toString().toDouble()
+                    grade = "NA"
+                    orderName = input_orderName.text.toString()
+                    unit = input_unit.text.toString()
+                    log_width = input_width.text.toString()
+                    refChange = input_refChange.text.toString()
 
-
-                if (status == "Log" && input_unit.text.toString() == "ft") {
-                    var girdth_width = width_feet * 12 + width_inches
-                    var log_length = input_length.text.toString().toDouble()
-                    ton = (-1 * girdth_width * girdth_width * log_length / 115200).toDouble()
-                    total_ton += ton
-                } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (-1 * this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "ft") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (-1 * this_width * this_thickness * this_length / 7200).toDouble()
-                    total_ton += ton
-                } else if (status == "Log" && input_unit.text.toString() == "mm") {
-                    ton = 0.000000
-                } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (-1 * this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                } else if (status == "S4S" && input_unit.text.toString() == "mm") {
-                    var this_width = input_width.text.toString().toDouble()
-                    var this_thickness = input_thickness.text.toString().toDouble()
-                    var this_length = input_length.text.toString().toDouble()
-                    ton = (-1 * this_width * this_thickness * this_length / 1415800000).toDouble()
-                    total_ton += ton
-                }
-
-                var num_of_wood = text_count.text.toString().toInt() - 1
-                text_count.setText(num_of_wood.toString())
-                ref -= 1
-                if (input_refChange.text.toString() == "0") {
-                    ref_override = ref
-                } else {
-                    ref_override = input_refChange.text.toString().toInt()
-                    ref += 1
-                }
-                if(status == "Conversion" || status == "S4S") {
-                    binding_second.totalNumTon.setText(ref_override.toString())
-                } else {
-                    binding_second.totalNumTon.setText("%.5f".format(total_ton).toString())
-                }
-                print(text_count.text)
-                try{
-                    val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
-                    val outPutWriter = OutputStreamWriter(fileOutputStream)
-                    val append_arr = arrayOf(tally_date,
-                        ref_override.toString(),
-                        counter_name,
-                        supplier_name,
-                        input_orderName.text,
-                        species,
-                        status,
-                        "NA",
-                        input_unit.text,
-                        input_width.text,
-                        input_thickness.text,
-                        input_length.text,
-                        "%.5f".format(ton).toString(),
-                        boiler,
-                        "-1"
-                    )
-                    outPutWriter.append("\n")
-                    for (child in append_arr) {
-                        outPutWriter.append(child)
-                        outPutWriter.append(",")
+                    if (status == "Log" && input_unit.text.toString() == "ft") {
+                        calculateSubtractLog(log_width, length)
+                    } else if (status == "Conversion" && input_unit.text.toString() == "ft") {
+                        calculateFeet(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "ft") {
+                        calculateSubtractFeet(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "ft") {
+                        calculateSubtractFeet(lumber_width, thickness, length)
+                    } else if (status == "Log" && input_unit.text.toString() == "mm") {
+                        ton = 0.000000
+                    } else if (status == "Conversion" && input_unit.text.toString() == "mm") {
+                        calculateSubtractMm(lumber_width, thickness, length)
+                    } else if (status == "S4S" && input_unit.text.toString() == "mm") {
+                        calculateSubtractMm(lumber_width, thickness, length)
+                    } else if (status == "Bundle" && input_unit.text.toString() == "mm") {
+                        calculateSubtractMm(lumber_width, thickness, length)
                     }
-                    outPutWriter.close()
-                    print("\n Closing outputwrite")
+
+                    var num_of_wood = text_count.text.toString().toInt() - 1
+                    text_count.setText(num_of_wood.toString())
+                    total_pieces -= 1
+                    binding_second.totalNumPieces.setText(total_pieces.toString())
+
+                    recordSubtractMeasurement(grade)
+                    if (status != "Bundle") {
+                        refSubtracted()
+                    }
+
+                    btn_subtract.setTextColor(Color.parseColor("#FF0000"))
+                    btn_b.setTextColor(Color.parseColor("#000000"))
+                    btn_c.setTextColor(Color.parseColor("#000000"))
+                    btn_q.setTextColor(Color.parseColor("#000000"))
+                    btn_r.setTextColor(Color.parseColor("#000000"))
+                    btn_u.setTextColor(Color.parseColor("#000000"))
+                    btn_a.setTextColor(Color.parseColor("#000000"))
+                    if (status != "Bundle") {
+                        input_refChange.setText("0")
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        this@SecondActivity,
+                        "Warning! You have provided an invalid input! Please resubmit the last" +
+                                " measurement.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                //input_orderName.setText("NA")
-                btn_subtract.setTextColor(Color.parseColor("#FF0000"))
-                btn_b.setTextColor(Color.parseColor("#000000"))
-                btn_c.setTextColor(Color.parseColor("#000000"))
-                btn_q.setTextColor(Color.parseColor("#000000"))
-                btn_r.setTextColor(Color.parseColor("#000000"))
-                btn_u.setTextColor(Color.parseColor("#000000"))
-                btn_a.setTextColor(Color.parseColor("#000000"))
-                input_refChange.setText("0")
             })
         }
     }
+
+    fun calculateLog(log_width: String, length: Double) {
+        if (log_width.contains(".")) {
+            try {
+                width_arr = log_width.split(delim)
+                width_feet = width_arr[0].toInt()
+            } catch(e: Exception) {}
+            try {
+                width_inches = width_arr[1].toInt()
+                print(width_inches)
+            } catch(e: Exception) {}
+        } else {
+            width_feet = log_width.toInt()
+        }
+
+        var girdth_width = width_feet * 12 + width_inches
+        var log_length = length
+        ton = (girdth_width * girdth_width * log_length / 115200).toDouble()
+        total_ton += ton
+    }
+
+    fun calculateFeet(feet_width: Double, feet_thickness: Double, feet_length: Double) {
+        ton = (feet_width * feet_thickness * feet_length / 7200).toDouble()
+        total_ton += ton
+    }
+
+    fun calculateMm(mm_width: Double, mm_thickness: Double, mm_length: Double) {
+        ton = (mm_width * mm_thickness * mm_length / 1415800000).toDouble()
+        total_ton += ton
+    }
+
+    fun recordMeasurement(lumber_grade: String) {
+        if (orderName == "NA") {
+            orderName = "Ground Stock"
+        }
+        try{
+            val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+            val outPutWriter = OutputStreamWriter(fileOutputStream)
+            val append_arr = arrayOf(tally_date,
+                ref_override.toString(),
+                counter_name,
+                supplier_name,
+                orderName,
+                species,
+                status,
+                lumber_grade,
+                unit,
+                "%.2f".format(lumber_width).toString(),
+                "%.2f".format(thickness).toString(),
+                "%.2f".format(length).toString(),
+                "%.4f".format(ton).toString(),
+                boiler,
+                "1"
+            )
+            outPutWriter.append("\n")
+            for (child in append_arr) {
+                outPutWriter.append(child)
+                outPutWriter.append(",")
+            }
+            outPutWriter.close()
+            print("\n Closing outputwrite")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this@SecondActivity,
+                "Warning! Your last measurement" +
+                        " was not recorded. Please re-enter button.",
+                Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun refAdded() {
+        if (status != "Bundle") {
+            ref += 1
+
+            if (refChange == "0") {
+                ref_override = ref
+            } else {
+                ref_override = refChange.toInt()
+                ref -= 1
+            }
+        } else {
+            if (refChange == "0") {
+                ref_override = ref
+            } else {
+                ref_override = refChange.toInt()
+            }
+       }
+        if(status == "Conversion" || status == "S4S" || status == "Bundle") {
+            binding_second.totalNumTon.setText(ref_override.toString())
+        } else {
+            binding_second.totalNumTon.setText("%.4f".format(total_ton).toString())
+        }
+    }
+
+    fun calculateSubtractLog(log_width: String, length: Double) {
+        if (log_width.contains(".")) {
+            try {
+                width_arr = log_width.split(delim)
+                width_feet = width_arr[0].toInt()
+            } catch(e: Exception) {}
+            try {
+                width_inches = width_arr[1].toInt()
+                print(width_inches)
+            } catch(e: Exception) {}
+        } else {
+            width_feet = log_width.toInt()
+        }
+
+        var girdth_width = width_feet * 12 + width_inches
+        var log_length = length
+        ton = (-1*girdth_width * girdth_width * log_length / 115200).toDouble()
+        total_ton += ton
+    }
+
+    fun calculateSubtractFeet(feet_width: Double, feet_thickness: Double, feet_length: Double) {
+        ton = (-1*feet_width * feet_thickness * feet_length / 7200).toDouble()
+        total_ton += ton
+    }
+
+    fun calculateSubtractMm(mm_width: Double, mm_thickness: Double, mm_length: Double) {
+        ton = (-1*mm_width * mm_thickness * mm_length / 1415800000).toDouble()
+        total_ton += ton
+    }
+
+    fun recordSubtractMeasurement(lumber_grade: String) {
+        try{
+            val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
+            val outPutWriter = OutputStreamWriter(fileOutputStream)
+            val append_arr = arrayOf(tally_date,
+                ref_override.toString(),
+                counter_name,
+                supplier_name,
+                orderName,
+                species,
+                status,
+                lumber_grade,
+                unit,
+                "%.2f".format(lumber_width).toString(),
+                "%.2f".format(thickness).toString(),
+                "%.2f".format(length).toString(),
+                "%.4f".format(ton).toString(),
+                boiler,
+                "-1"
+            )
+            outPutWriter.append("\n")
+            for (child in append_arr) {
+                outPutWriter.append(child)
+                outPutWriter.append(",")
+            }
+            outPutWriter.close()
+            print("\n Closing outputwrite")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this@SecondActivity,
+                "Warning! Your last measurement" +
+                        " was not recorded. Please re-enter button.",
+                Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun refSubtracted() {
+        if (status != "Bundle") {
+            ref -= 1
+
+            if (refChange == "0") {
+                ref_override = ref
+            } else {
+                ref_override = refChange.toInt()
+            }
+        } else {
+            if (refChange == "0") {
+                ref_override = ref
+            } else {
+                ref_override = refChange.toInt()
+            }
+        }
+        if(status == "Conversion" || status == "S4S" || status == "Bundle") {
+            binding_second.totalNumTon.setText(ref_override.toString())
+        } else {
+            binding_second.totalNumTon.setText("%.4f".format(total_ton).toString())
+        }
     }
 }
