@@ -77,6 +77,10 @@ class SecondActivity : AppCompatActivity() {
 
     var refChange = "String"
 
+    var text_width_log = "String"
+    var text_thickness_log = "String"
+    var text_length_log = "String"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -282,6 +286,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
@@ -342,6 +349,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateLog(log_width, length)
@@ -401,6 +411,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateLog(log_width, length)
@@ -460,6 +473,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateLog(log_width, length)
@@ -518,6 +534,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateLog(log_width, length)
@@ -576,6 +595,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateLog(log_width, length)
@@ -635,6 +657,9 @@ class SecondActivity : AppCompatActivity() {
                     unit = input_unit.text.toString()
                     log_width = input_width.text.toString()
                     refChange = input_refChange.text.toString()
+                    text_width_log = input_width.text.toString()
+                    text_thickness_log = input_thickness.text.toString()
+                    text_length_log = input_length.text.toString()
 
                     if (status == "Log" && input_unit.text.toString() == "ft") {
                         calculateSubtractLog(log_width, length)
@@ -659,10 +684,8 @@ class SecondActivity : AppCompatActivity() {
                     total_pieces -= 1
                     binding_second.totalNumPieces.setText(total_pieces.toString())
 
+                    refSubtractedOverride()
                     recordSubtractMeasurement(grade)
-                    if (status != "Bundle") {
-                        refSubtracted()
-                    }
 
                     btn_subtract.setTextColor(Color.parseColor("#FF0000"))
                     btn_b.setTextColor(Color.parseColor("#000000"))
@@ -671,6 +694,9 @@ class SecondActivity : AppCompatActivity() {
                     btn_r.setTextColor(Color.parseColor("#000000"))
                     btn_u.setTextColor(Color.parseColor("#000000"))
                     btn_a.setTextColor(Color.parseColor("#000000"))
+
+                    refSubtracted()
+
                     if (status != "Bundle") {
                         input_refChange.setText("0")
                     }
@@ -733,9 +759,9 @@ class SecondActivity : AppCompatActivity() {
                 status,
                 lumber_grade,
                 unit,
-                "%.2f".format(lumber_width).toString(),
-                "%.2f".format(thickness).toString(),
-                "%.2f".format(length).toString(),
+                text_width_log,
+                text_thickness_log,
+                text_length_log,
                 "%.4f".format(ton).toString(),
                 boiler,
                 "1"
@@ -846,21 +872,17 @@ class SecondActivity : AppCompatActivity() {
         }
     }
 
+    fun refSubtractedOverride() {
+        if (refChange == "0") {
+            ref_override = ref
+        } else {
+            ref_override = refChange.toInt()
+        }
+    }
+
     fun refSubtracted() {
         if (status != "Bundle") {
             ref -= 1
-
-            if (refChange == "0") {
-                ref_override = ref
-            } else {
-                ref_override = refChange.toInt()
-            }
-        } else {
-            if (refChange == "0") {
-                ref_override = ref
-            } else {
-                ref_override = refChange.toInt()
-            }
         }
         if(status == "Conversion" || status == "S4S" || status == "Bundle") {
             binding_second.totalNumTon.setText(ref_override.toString())
