@@ -115,7 +115,7 @@ class SecondActivity : AppCompatActivity() {
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_PRIVATE)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
-            val heading_arr= arrayOf("Date","Reference","Name", "Supplier","Order", "Species","Status","Grade", "Unit",
+            val heading_arr= arrayOf("Date","Reference","Name", "Location", "Supplier", "Order", "Species","Status","Grade", "Unit",
                 "W", "T", "L", "CBT/CBM", "Boiler", "Quantity")
             for (child in heading_arr) {
                 outPutWriter.write(child)
@@ -750,9 +750,11 @@ class SecondActivity : AppCompatActivity() {
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
-            val append_arr = arrayOf(tally_date,
+            val append_arr = arrayOf(
+                tally_date,
                 ref_override.toString(),
                 counter_name,
+                invoice,
                 supplier_name,
                 orderName,
                 species,
@@ -840,9 +842,11 @@ class SecondActivity : AppCompatActivity() {
         try{
             val fileOutputStream: FileOutputStream = openFileOutput(this_filename, Context.MODE_APPEND)
             val outPutWriter = OutputStreamWriter(fileOutputStream)
-            val append_arr = arrayOf(tally_date,
+            val append_arr = arrayOf(
+                tally_date,
                 ref_override.toString(),
                 counter_name,
+                invoice,
                 supplier_name,
                 orderName,
                 species,

@@ -73,7 +73,7 @@
             android:id="@+id/text_invoiceNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Invoice or Order No."
+            android:text="Location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
